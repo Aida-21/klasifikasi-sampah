@@ -699,7 +699,11 @@ function Dashboard() {
   async function handleCameraClick() {
     try {
       setError("");
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { 
+          facingMode:{ ideal: "environment" } 
+        } 
+      });
       setCameraOpen(true);
 
       setTimeout(async () => {
@@ -712,6 +716,14 @@ function Dashboard() {
       console.log(error);
       setError("Kamera tidak bisa diakses. Pastikan izin kamera sudah diberikan.");
     }
+  }
+    function handleCloseCamera() {
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject;
+      stream.getTracks().forEach((track) => track.stop());
+      videoRef.current.srcObject = null;
+    }
+    setCameraOpen(false);
   }
 
   async function handleCaptureImage() {
@@ -919,10 +931,19 @@ function Dashboard() {
           {cameraOpen && (
             <div className="camera-wrapper">
               <video ref={videoRef} autoPlay playsInline className="camera-video" />
-              <button className="btn-capture" onClick={handleCaptureImage} disabled={!cameraOpen}>
-                <CaptureIcon />
-                Ambil Gambar
-              </button>
+              <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+                <button className="btn-capture" onClick={handleCaptureImage} disabled={!cameraOpen}>
+                  <CaptureIcon />
+                  Ambil Gambar
+                </button>
+                <button
+                  className="btn-outline"
+                  onClick={handleCloseCamera}
+                  style={{ marginTop: "10px" }}
+                >
+                  Tutup Kamera
+                </button>
+              </div>
             </div>
           )}
 
