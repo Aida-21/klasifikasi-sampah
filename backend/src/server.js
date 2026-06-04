@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import fs from "fs";
+import path from "path";
 
 import classifyRoutes from "./routes/classifyRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
@@ -9,11 +11,21 @@ import historyRoutes from "./routes/historyRoutes.js";
 
 dotenv.config();
 
+// Pastikan folder uploads ada
+const uploadDir = path.join("src", "uploads");
+
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+  console.log("Folder uploads berhasil dibuat");
+}
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use("/uploads", express.static("src/uploads"));
+
+// Akses file upload
+app.use("/uploads", express.static(uploadDir));
 
 app.get("/", (req, res) => {
   res.json({
@@ -42,7 +54,7 @@ app.use((error, req, res, next) => {
 
   return res.status(500).json({
     success: false,
-    message: "Terjadi kesalahan pada server",
+    message: error.message || "Terjadi kesalahan pada server",
   });
 });
 
