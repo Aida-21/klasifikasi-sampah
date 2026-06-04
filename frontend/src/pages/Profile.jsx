@@ -93,7 +93,7 @@ function Profile() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch("http://localhost:5000/api/profile", {
+      const response = await fetch(`${API_URL}/api/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -161,7 +161,7 @@ function Profile() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch("http://localhost:5000/api/profile/photo", {
+      const response = await fetch(`${API_URL}/api/profile/photo`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -240,7 +240,7 @@ function Profile() {
 
       const token = localStorage.getItem("token");
 
-      const response = await fetch("http://localhost:5000/api/profile", {
+      const response = await fetch(`${API_URL}/api/profile`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
