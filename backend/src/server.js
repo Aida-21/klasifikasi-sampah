@@ -63,3 +63,12 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server berjalan di port ${PORT}`);
 });
+// Tambahkan header CORS khusus untuk folder uploads
+app.use('/uploads', (req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  next();
+});
+
+// Baru serve static files
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));

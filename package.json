@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
+    "cloudinary": "^1.41.3",
+    "multer-storage-cloudinary": "^4.0.0",
     "react-router-dom": "^7.15.0",
     "tailwindcss": "^4.3.0"
   }
