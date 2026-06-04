@@ -1,20 +1,10 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  requireTLS: true,
-  family: 4,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendOtpEmail = async ({ email, otp }) => {
-  await transporter.sendMail({
-    from: `"Klasifikasi Sampah" <${process.env.EMAIL_USER}>`,
+  const { error } = await resend.emails.send({
+    from: "onboarding@resend.dev", // ganti jika sudah verifikasi domain
     to: email,
     subject: "Kode OTP Verifikasi Website Klasifikasi Sampah",
     html: `
@@ -24,13 +14,18 @@ export const sendOtpEmail = async ({ email, otp }) => {
       <p>Kode ini berlaku selama 5 menit.</p>
     `,
   });
+
+  if (error) {
+    console.error("Resend error:", error);
+    throw new Error(error.message);
+  }
 };
 
 export const sendResetPasswordEmail = async ({ email, token }) => {
   const resetLink = `${process.env.CLIENT_URL}/reset-password/${token}`;
 
-  await transporter.sendMail({
-    from: `"Klasifikasi Sampah" <${process.env.EMAIL_USER}>`,
+  const { error } = await resend.emails.send({
+    from: "onboarding@resend.dev", // ganti jika sudah verifikasi domain
     to: email,
     subject: "Reset Password Klasifikasi Sampah",
     html: `
@@ -40,4 +35,9 @@ export const sendResetPasswordEmail = async ({ email, token }) => {
       <p>Link ini berlaku selama 15 menit.</p>
     `,
   });
+
+  if (error) {
+    console.error("Resend error:", error);
+    throw new Error(error.message);
+  }
 };
