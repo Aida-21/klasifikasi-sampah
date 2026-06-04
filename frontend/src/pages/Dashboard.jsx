@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Navbar from "../components/Navbar";
-
+const API_URL = import.meta.env.VITE_API_URL;
 
 const UploadIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -631,7 +631,7 @@ function Dashboard() {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const response = await fetch("http://localhost:5000/api/histories", {
+        const response = await fetch(`${API_URL}/api/histories`, { 
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -639,7 +639,7 @@ function Dashboard() {
 
         if (data.success) {
           const formattedHistory = data.histories.map((item) => ({
-            image: `http://localhost:5000/uploads/${item.image_url}`,
+            image: `${API_URL}/uploads/${item.image_url}`,
             result: item.prediction,
             confidence: item.confidence,
           }));
@@ -756,7 +756,7 @@ function Dashboard() {
             headers.Authorization = `Bearer ${token}`;
           }
 
-          const response = await fetch("http://localhost:5000/api/classify", {
+          const response = await fetch(`${API_URL}/api/classify`, {
             method: "POST",
             headers,
             body: formData,
@@ -780,7 +780,7 @@ function Dashboard() {
         setDisclaimer(data.disclaimer || "");
 
         saveHistory({
-          image: `http://localhost:5000/uploads/${data.filename}`,
+         image: `${API_URL}/uploads/${data.filename}`,
           result: data.prediction,
           confidence: data.confidence,
         });
@@ -814,7 +814,7 @@ function Dashboard() {
           headers.Authorization = `Bearer ${token}`;
         }
 
-        const response = await fetch("http://localhost:5000/api/classify", {
+        const response = await fetch(`${API_URL}/api/classify`, {
           method: "POST",
           headers,
           body: formData,
@@ -838,7 +838,7 @@ function Dashboard() {
       }, 300);
 
       saveHistory({
-        image: `http://localhost:5000/uploads/${data.filename}`,
+        image: `${API_URL}/uploads/${data.filename}`,
         result: data.prediction,
         confidence: data.confidence,
       });

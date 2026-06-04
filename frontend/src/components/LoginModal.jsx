@@ -1,4 +1,5 @@
 import { useState } from "react";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function LoginModal({ isOpen, onClose, onLogin }) {
   const [mode, setMode] = useState("login");
@@ -15,21 +16,21 @@ function LoginModal({ isOpen, onClose, onLogin }) {
     let body = {};
 
     if (mode === "login") {
-      url = "http://localhost:5000/api/auth/login";
+      url = `${API_URL}/api/auth/login`;
       body = { email, password };
     }
 
     if (mode === "register") {
-      url = "http://localhost:5000/api/auth/register";
+      url = `${API_URL}/api/auth/register`;
       body = { name, email, password };
     }
 
     if (mode === "verifyOtp") {
-      url = "http://localhost:5000/api/auth/verify-otp";
+      url = `${API_URL}/api/auth/verify-otp`;
       body = { email, otp };
     }
     if (mode === "forgotPassword") {
-      url = "http://localhost:5000/api/auth/forgot-password";
+      url = `${API_URL}/api/auth/forgot-password`;
       body = { email };
     }
 
@@ -88,7 +89,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
         return;
       }
 
-      const response = await fetch("http://localhost:5000/api/auth/resend-otp", {
+      const response = await fetch(`${API_URL}/api/auth/resend-otp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
