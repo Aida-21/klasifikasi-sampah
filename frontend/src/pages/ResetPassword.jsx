@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function ResetPassword() {
   const { token } = useParams();
 
@@ -20,7 +22,7 @@ function ResetPassword() {
       }
 
       const response = await fetch(
-        "http://localhost:5000/api/auth/reset-password",
+        `${API_URL}/api/auth/reset-password`,
         {
           method: "POST",
           headers: {

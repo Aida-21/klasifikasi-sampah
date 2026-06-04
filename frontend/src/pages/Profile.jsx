@@ -9,6 +9,8 @@ import {
 } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function Profile() {
   const [profile, setProfile] = useState(null);
   const [histories, setHistories] = useState([]);
@@ -38,7 +40,7 @@ function Profile() {
           return;
         }
 
-        const response = await fetch("http://localhost:5000/api/profile", {
+        const response = await fetch(`${API_URL}/api/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -59,7 +61,7 @@ function Profile() {
         }
 
         const historyResponse = await fetch(
-          "http://localhost:5000/api/histories",
+          `${API_URL}/api/histories`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -131,7 +133,7 @@ function Profile() {
       const formData = new FormData();
       formData.append("photo", file);
 
-      const response = await fetch("http://localhost:5000/api/profile/photo", {
+      const response = await fetch(`${API_URL}/api/profile/photo`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -197,7 +199,7 @@ function Profile() {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        "http://localhost:5000/api/profile/password",
+        `${API_URL}/api/profile/password`,
         {
           method: "PUT",
           headers: {
@@ -451,7 +453,7 @@ function Profile() {
                 >
                   {profile.photo ? (
                     <img
-                      src={`http://localhost:5000/uploads/${profile.photo}`}
+                      src={`${API_URL}/uploads/${profile.photo}`}
                       alt="Profile"
                       style={{
                         width: "100%",

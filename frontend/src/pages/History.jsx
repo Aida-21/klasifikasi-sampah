@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { FaHistory } from "react-icons/fa";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function History() {
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
@@ -25,7 +27,7 @@ function History() {
           return;
         }
 
-        const response = await fetch("http://localhost:5000/api/histories", {
+        const response = await fetch(`${API_URL}/api/histories`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -294,7 +296,7 @@ function History() {
                   }}
                 >
                   <img
-                    src={`http://localhost:5000/uploads/${item.image_url}`}
+                    src={`${API_URL}/uploads/${item.image_url}`}
                     alt="history"
                     style={{
                       width: "100%",
