@@ -32,7 +32,7 @@ Model Machine Learning digunakan untuk mengidentifikasi beberapa kategori sampah
 
 ## Arsitektur Sistem
 
-
+```text
 Frontend (React + Vite)
         │
         ▼
@@ -158,6 +158,8 @@ Lihat file:
 frontend/.env.example
 ```
 
+### Tautan Model Machine Learning
+Model tersedia di Google Drive: https://drive.google.com/drive/folders/1zX_NJnRITMgaEsmOD-pU_BZ3HLhetauJ?usp=sharing
 
 ## Deployment
 
