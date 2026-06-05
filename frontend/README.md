@@ -132,7 +132,7 @@ Pengguna dapat:
 
 ## Tim Pengembang
 
-Capstone Project DBS Foundation Coding Camp 2026.
+Tim Capstone Project : CC26-PSU384
 
 # React + Vite
 
