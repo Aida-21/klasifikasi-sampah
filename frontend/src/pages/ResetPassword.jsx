@@ -3,51 +3,78 @@ import { useParams } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+function Toast({ message, type }) {
+  return (
+    <div style={{
+      position: "fixed",
+      bottom: "30px",
+      right: "30px",
+      backgroundColor: type === "success" ? "#10b981" : "#dc2626",
+      color: "white",
+      padding: "14px 24px",
+      borderRadius: "14px",
+      fontSize: "15px",
+      fontWeight: "500",
+      zIndex: 9999,
+      display: "flex",
+      alignItems: "center",
+      gap: "10px",
+    }}>
+      {type === "success" ? "✓" : "✕"} {message}
+    </div>
+  );
+}
+
 function ResetPassword() {
   const { token } = useParams();
-
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [toast, setToast] = useState({ show: false, message: "", type: "success" });
+
+  const showToast = (message, type = "success") => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast({ show: false, message: "", type: "success" }), 3000);
+  };
 
   async function handleResetPassword() {
     try {
       if (!newPassword || !confirmPassword) {
-        alert("Password baru dan konfirmasi wajib diisi");
+        showToast("Password baru dan konfirmasi wajib diisi", "error");
         return;
       }
 
       if (newPassword !== confirmPassword) {
-        alert("Konfirmasi password tidak sama");
+        showToast("Konfirmasi password tidak sama", "error");
         return;
       }
 
-      const response = await fetch(
-        `${API_URL}/api/auth/reset-password`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            token,
-            newPassword,
-            confirmPassword,
-          }),
-        }
-      );
+      const response = await fetch(`${API_URL}/api/auth/reset-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token,
+          newPassword,
+          confirmPassword,
+        }),
+      });
 
       const data = await response.json();
 
       if (!data.success) {
-        alert(data.message);
+        showToast(data.message, "error");
         return;
       }
 
-      alert("Password berhasil direset. Silakan login.");
-      window.location.href = "/";
+      showToast("Password berhasil direset. Silakan login.");
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 2000);
+
     } catch (error) {
       console.log(error);
-      alert("Gagal reset password");
+      showToast("Gagal reset password", "error");
     }
   }
 
@@ -73,22 +100,11 @@ function ResetPassword() {
           boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
         }}
       >
-        <h2
-          style={{
-            marginBottom: "10px",
-            color: "#10b981",
-          }}
-        >
+        <h2 style={{ marginBottom: "10px", color: "#10b981" }}>
           Reset Password
         </h2>
 
-        <p
-          style={{
-            color: "#6b7280",
-            marginBottom: "24px",
-            lineHeight: "1.5",
-          }}
-        >
+        <p style={{ color: "#6b7280", marginBottom: "24px", lineHeight: "1.5" }}>
           Masukkan password baru untuk akun Anda.
         </p>
 
@@ -128,9 +144,7 @@ function ResetPassword() {
         </button>
 
         <button
-          onClick={() => {
-            window.location.href = "/";
-          }}
+          onClick={() => { window.location.href = "/"; }}
           style={{
             width: "100%",
             padding: "13px",
@@ -145,6 +159,8 @@ function ResetPassword() {
           Kembali ke Login
         </button>
       </div>
+
+      {toast.show && <Toast message={toast.message} type={toast.type} />}
     </div>
   );
 }
