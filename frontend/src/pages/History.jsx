@@ -94,7 +94,6 @@ function History() {
           localStorage.removeItem("token");
           localStorage.removeItem("user");
           localStorage.removeItem("scanHistory");
-
           setUser(null);
           setHistory([]);
           window.location.href = "/";
@@ -109,12 +108,7 @@ function History() {
           boxSizing: "border-box",
         }}
       >
-        <div
-          style={{
-            textAlign: "center",
-            marginBottom: "36px",
-          }}
-        >
+        <div style={{ textAlign: "center", marginBottom: "36px" }}>
           <h1
             style={{
               color: "#10b981",
@@ -125,14 +119,7 @@ function History() {
           >
             Riwayat Klasifikasi
           </h1>
-
-          <p
-            style={{
-              color: "#555",
-              fontSize: "clamp(15px, 2vw, 18px)",
-              margin: 0,
-            }}
-          >
+          <p style={{ color: "#555", fontSize: "clamp(15px, 2vw, 18px)", margin: 0 }}>
             Lihat semua riwayat klasifikasi sampah Anda
           </p>
         </div>
@@ -219,33 +206,15 @@ function History() {
               boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
             }}
           >
-            <div
-              style={{
-                fontSize: "70px",
-                marginBottom: "20px",
-              }}
-            >
+            <div style={{ fontSize: "70px", marginBottom: "20px" }}>
               <FaHistory />
             </div>
-
-            <h2
-              style={{
-                color: "#111827",
-                marginBottom: "10px",
-              }}
-            >
+            <h2 style={{ color: "#111827", marginBottom: "10px" }}>
               Riwayat Tidak Tersedia
             </h2>
-
-            <p
-              style={{
-                color: "#6b7280",
-                marginBottom: "20px",
-              }}
-            >
+            <p style={{ color: "#6b7280", marginBottom: "20px" }}>
               Silakan login untuk melihat riwayat klasifikasi Anda.
             </p>
-
             <button
               onClick={() => (window.location.href = "/")}
               style={{
@@ -280,8 +249,8 @@ function History() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-                gap: "24px",
+                gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                gap: "18px",
               }}
             >
               {filteredHistory.map((item) => (
@@ -290,33 +259,24 @@ function History() {
                   style={{
                     backgroundColor: "white",
                     borderRadius: "20px",
-                    padding: "18px",
+                    overflow: "hidden",
                     boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
                     boxSizing: "border-box",
                   }}
                 >
-                  <div
-                    key={item.id}
-                    style={{
-                      backgroundColor: "white",
-                      borderRadius: "20px",
-                      overflow: "hidden",
-                      boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
-                      boxSizing: "border-box",
-                    }}
-                  >
-                    <div style={{ position: "relative", width: "100%", aspectRatio: "1" }}>
-                      <img
-                        src={item.image_url}
-                        alt="history"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          display: "block",
-                        }}
-                      />
-                      <span style={{
+                  <div style={{ position: "relative", width: "100%", aspectRatio: "1" }}>
+                    <img
+                      src={item.image_url}
+                      alt="history"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        display: "block",
+                      }}
+                    />
+                    <span
+                      style={{
                         position: "absolute",
                         bottom: "9px",
                         left: "9px",
@@ -328,53 +288,37 @@ function History() {
                         fontSize: "12px",
                         fontWeight: "700",
                         color: "#10b981",
-                      }}>
-                        {item.prediction}
-                      </span>
-                    </div>
-
-                    <div style={{ padding: "15px 16px 17px" }}>
-                      <p style={{ fontSize: "15px", fontWeight: "700", color: "#111827", marginBottom: "4px" }}>
-                        {item.prediction}
-                      </p>
-                      <p style={{ fontSize: "12px", color: "#10b981", marginBottom: "8px", fontFamily: "monospace" }}>
-                        {item.confidence}% akurasi
-                      </p>
-                      <p style={{ fontSize: "12px", color: "#555", lineHeight: "1.6" }}>
-                        {getDescription(item.prediction)}
-                      </p>
-                    </div>
+                      }}
+                    >
+                      {item.prediction}
+                    </span>
                   </div>
 
-                  <h2
-                    style={{
-                      margin: "0 0 8px",
-                      fontSize: "24px",
-                      color: "#111827",
-                    }}
-                  >
-                    {item.prediction}
-                  </h2>
-
-                  <p
-                    style={{
-                      color: "gray",
-                      margin: 0,
-                    }}
-                  >
-                    Confidence: {item.confidence}%
-                  </p>
-
-                  <p
-                    style={{
-                      marginTop: "12px",
-                      color: "#555",
-                      lineHeight: "1.6",
-                      fontSize: "15px",
-                    }}
-                  >
-                    {getDescription(item.prediction)}
-                  </p>
+                  <div style={{ padding: "15px 16px 17px" }}>
+                    <p
+                      style={{
+                        fontSize: "15px",
+                        fontWeight: "700",
+                        color: "#111827",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      {item.prediction}
+                    </p>
+                    <p
+                      style={{
+                        fontSize: "12px",
+                        color: "#10b981",
+                        marginBottom: "8px",
+                        fontFamily: "monospace",
+                      }}
+                    >
+                      {item.confidence}% akurasi
+                    </p>
+                    <p style={{ fontSize: "12px", color: "#555", lineHeight: "1.6" }}>
+                      {getDescription(item.prediction)}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -397,15 +341,7 @@ function StatBox({ title, value, active }) {
         textAlign: "center",
       }}
     >
-      <p
-        style={{
-          margin: 0,
-          fontSize: "16px",
-        }}
-      >
-        {title}
-      </p>
-
+      <p style={{ margin: 0, fontSize: "16px" }}>{title}</p>
       <h2
         style={{
           fontSize: "clamp(30px, 5vw, 40px)",
