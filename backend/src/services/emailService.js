@@ -1,9 +1,12 @@
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-const SibApiV3Sdk = require("@getbrevo/brevo");
+const SibApiV3Sdk = require("sib-api-v3-sdk");
+
+const defaultClient = SibApiV3Sdk.ApiClient.instance;
+const apiKey = defaultClient.authentications["api-key"];
+apiKey.apiKey = process.env.BREVO_API_KEY;
 
 const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-apiInstance.authentications["apiKey"].apiKey = process.env.BREVO_API_KEY;
 
 export const sendOtpEmail = async ({ email, otp }) => {
   const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
