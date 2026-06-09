@@ -1,43 +1,38 @@
-import { Resend } from "resend";
+import * as SibApiV3Sdk from "@getbrevo/brevo";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+apiInstance.setApiKey(
+  SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey,
+  process.env.BREVO_API_KEY
+);
 
 export const sendOtpEmail = async ({ email, otp }) => {
-  const { error } = await resend.emails.send({
-    from: "onboarding@resend.dev", // ganti jika sudah verifikasi domain
-    to: email,
-    subject: "Kode OTP Verifikasi Website Klasifikasi Sampah",
-    html: `
+  const sendSmtpEmail = {
+    to: [{ email }],
+    sender: { email: "nuraidaschool21@gmail.com", name: "Klasifikasi Sampah" },
+    subject: "Kode OTP Verifikasi",
+    htmlContent: `
       <h2>Verifikasi Email</h2>
       <p>Kode OTP Anda:</p>
       <h1>${otp}</h1>
-      <p>Kode ini berlaku selama 5 menit.</p>
+      <p>Berlaku selama 5 menit.</p>
     `,
-  });
-
-  if (error) {
-    console.error("Resend error:", error);
-    throw new Error(error.message);
-  }
+  };
+  await apiInstance.sendTransacEmail(sendSmtpEmail);
 };
 
 export const sendResetPasswordEmail = async ({ email, token }) => {
   const resetLink = `${process.env.CLIENT_URL}/reset-password/${token}`;
-
-  const { error } = await resend.emails.send({
-    from: "onboarding@resend.dev", // ganti jika sudah verifikasi domain
-    to: email,
+  const sendSmtpEmail = {
+    to: [{ email }],
+    sender: { email: "nuraidaschool21@gmail.com", name: "Klasifikasi Sampah" },
     subject: "Reset Password Klasifikasi Sampah",
-    html: `
+    htmlContent: `
       <h2>Reset Password</h2>
-      <p>Klik link berikut untuk mengganti password:</p>
+      <p>Klik link berikut:</p>
       <a href="${resetLink}">${resetLink}</a>
-      <p>Link ini berlaku selama 15 menit.</p>
+      <p>Berlaku selama 15 menit.</p>
     `,
-  });
-
-  if (error) {
-    console.error("Resend error:", error);
-    throw new Error(error.message);
-  }
+  };
+  await apiInstance.sendTransacEmail(sendSmtpEmail);
 };
