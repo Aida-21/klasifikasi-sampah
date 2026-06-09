@@ -296,7 +296,7 @@ function History() {
                   }}
                 >
                   <img
-                    src={`${API_URL}/uploads/${item.image_url}`}
+                    src={item.image_url}
                     alt="history"
                     style={{
                       width: "100%",

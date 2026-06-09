@@ -20,9 +20,10 @@ const classifyImage = async (req, res) => {
 
     const formData = new FormData();
 
-    // Sesuaikan dengan API tim AI.
-    // Dari kode tim AI, field yang diminta adalah "image".
-    formData.append("file", fs.createReadStream(req.file.path));
+    formData.append("file", fs.createReadStream(req.file.path), {
+      filename: req.file.originalname,
+      contentType: req.file.mimetype,
+    });
 
     const aiResponse = await axios.post(
       `${process.env.AI_API_URL}/predict`,

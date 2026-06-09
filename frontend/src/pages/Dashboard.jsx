@@ -639,7 +639,7 @@ function Dashboard() {
 
         if (data.success) {
           const formattedHistory = data.histories.map((item) => ({
-            image: `${API_URL}/uploads/${item.image_url}`,
+            image: item.image_url,
             result: item.prediction,
             confidence: item.confidence,
           }));
@@ -792,7 +792,7 @@ function Dashboard() {
         setDisclaimer(data.disclaimer || "");
 
         saveHistory({
-         image: `${API_URL}/uploads/${data.filename}`,
+          image: data.filename,
           result: data.prediction,
           confidence: data.confidence,
         });
@@ -850,7 +850,7 @@ function Dashboard() {
       }, 300);
 
       saveHistory({
-        image: `${API_URL}/uploads/${data.filename}`,
+        image: data.filename,
         result: data.prediction,
         confidence: data.confidence,
       });
