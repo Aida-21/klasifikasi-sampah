@@ -1,10 +1,12 @@
-import Brevo from "@getbrevo/brevo";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const SibApiV3Sdk = require("@getbrevo/brevo");
 
-const apiInstance = new Brevo.TransactionalEmailsApi();
+const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 apiInstance.authentications["apiKey"].apiKey = process.env.BREVO_API_KEY;
 
 export const sendOtpEmail = async ({ email, otp }) => {
-  const sendSmtpEmail = new Brevo.SendSmtpEmail();
+  const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
   sendSmtpEmail.to = [{ email }];
   sendSmtpEmail.sender = { email: "nuraidaschool21@gmail.com", name: "Klasifikasi Sampah" };
   sendSmtpEmail.subject = "Kode OTP Verifikasi";
@@ -19,7 +21,7 @@ export const sendOtpEmail = async ({ email, otp }) => {
 
 export const sendResetPasswordEmail = async ({ email, token }) => {
   const resetLink = `${process.env.CLIENT_URL}/reset-password/${token}`;
-  const sendSmtpEmail = new Brevo.SendSmtpEmail();
+  const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
   sendSmtpEmail.to = [{ email }];
   sendSmtpEmail.sender = { email: "nuraidaschool21@gmail.com", name: "Klasifikasi Sampah" };
   sendSmtpEmail.subject = "Reset Password Klasifikasi Sampah";
