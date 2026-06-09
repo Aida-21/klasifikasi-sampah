@@ -8,6 +8,26 @@ function LoginModal({ isOpen, onClose, onLogin }) {
   const [password, setPassword] = useState("");
 
   const [otp, setOtp] = useState("");
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+    type: "success",
+  });
+  const showToast = (message, type = "success") => {
+    setToast({
+      show: true,
+      message,
+      type,
+    });
+
+    setTimeout(() => {
+      setToast({
+        show: false,
+        message: "",
+        type: "success",
+      });
+    }, 3000);
+  };
 
   if (!isOpen) return null;
 
@@ -46,26 +66,26 @@ function LoginModal({ isOpen, onClose, onLogin }) {
       const data = await response.json();
 
       if (!data.success) {
-        alert(data.message);
+        showToast(data.message, "error");
         return;
       }
 
       if (mode === "register") {
-        alert("Register berhasil. Silakan cek email untuk kode OTP.");
+        showToast("Register berhasil. Silakan cek email untuk kode OTP.", "success");
         setMode("verifyOtp");
         setPassword("");
         return;
       }
 
       if (mode === "verifyOtp") {
-        alert("Email berhasil diverifikasi. Silakan login.");
+        showToast("Email berhasil diverifikasi. Silakan login.", "success");
         setMode("login");
         setOtp("");
         setPassword("");
         return;
       }
       if (mode === "forgotPassword") {
-        alert("Link reset password telah dikirim ke email.");
+        showToast("Link reset password telah dikirim ke email.", "success");
         setMode("login");
         setPassword("");
         return;
@@ -78,14 +98,14 @@ function LoginModal({ isOpen, onClose, onLogin }) {
       onClose();
     } catch (error) {
       console.log(error);
-      alert("Gagal login/register");
+      showToast("Gagal login/register", "error");
     }
   }
 
   async function handleResendOtp() {
     try {
       if (!email) {
-        alert("Email wajib diisi");
+        showToast("Email wajib diisi", "error");
         return;
       }
 
@@ -100,14 +120,14 @@ function LoginModal({ isOpen, onClose, onLogin }) {
       const data = await response.json();
 
       if (!data.success) {
-        alert(data.message);
+        showToast(data.message, "error");
         return;
       }
 
-      alert("OTP baru berhasil dikirim ke email");
+      showToast("OTP baru berhasil dikirim ke email", "success");
     } catch (error) {
       console.log(error);
-      alert("Gagal mengirim ulang OTP");
+      showToast("Gagal mengirim ulang OTP", "error");
     }
   }
 
@@ -370,11 +390,37 @@ function LoginModal({ isOpen, onClose, onLogin }) {
         >
           Close
         </button>
+          {toast.show && (
+            <Toast message={toast.message} type={toast.type} />
+        )}
       </div>
     </div>
   );
 }
 
+function Toast({ message, type }) {
+  return (
+    <div
+      style={{
+        position: "fixed",
+        bottom: "30px",
+        right: "30px",
+        backgroundColor: type === "success" ? "#10b981" : "#dc2626",
+        color: "white",
+        padding: "14px 24px",
+        borderRadius: "14px",
+        fontSize: "15px",
+        fontWeight: "500",
+        zIndex: 9999,
+        display: "flex",
+        alignItems: "center",
+        gap: "10px",
+      }}
+    >
+      {type === "success" ? "✓" : "✕"} {message}
+    </div>
+  );
+}
 const inputStyle = {
   width: "100%",
   padding: "12px",
