@@ -20,9 +20,13 @@ const classifyImage = async (req, res) => {
 
     const formData = new FormData();
 
-    formData.append("file", fs.createReadStream(req.file.path), {
-      filename: req.file.originalname,
-      contentType: req.file.mimetype,
+    const imageResponse = await axios.get(req.file.path, {
+      responseType: "arraybuffer",
+    });
+
+    formData.append("file", Buffer.from(imageResponse.data), {
+      filename: req.file.originalname || "image.jpg",
+      contentType: req.file.mimetype || "image/jpeg",
     });
 
     const aiResponse = await axios.post(
@@ -78,7 +82,7 @@ const classifyImage = async (req, res) => {
     if (req.user) {
       history = await createHistory({
         userId: req.user.id,
-        imageUrl: req.file.filename,
+        imageUrl: req.file.path,
         prediction,
         confidence,
       });
@@ -95,7 +99,7 @@ const classifyImage = async (req, res) => {
       message: "Klasifikasi berhasil",
       prediction,
       confidence,
-      filename: req.file.filename,
+      filename: req.file.path, 
       education,
       top3,
       disclaimer,
