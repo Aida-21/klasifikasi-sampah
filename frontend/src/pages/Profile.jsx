@@ -30,6 +30,12 @@ function Profile() {
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
 
+  const [toast, setToast] = useState({ show: false, message: "", type: "success" });
+
+  const showToast = (message, type = "success") => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast({ show: false, message: "", type: "success" }), 3000);
+  };
   useEffect(() => {
     async function getProfile() {
       try {
@@ -108,17 +114,17 @@ function Profile() {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.message || "Gagal update profil");
+        showToast(data.message || "Gagal update profil");
         return;
       }
 
       setProfile(data.user);
       localStorage.setItem("user", JSON.stringify(data.user));
       setShowEditModal(false);
-      alert("Profil berhasil diperbarui");
+      showToast("Profil berhasil diperbarui");
     } catch (error) {
       console.log(error);
-      alert("Tidak dapat terhubung ke server");
+      showToast("Tidak dapat terhubung ke server", "error");
     }
   };
 
@@ -144,16 +150,16 @@ function Profile() {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.message || "Gagal upload foto profil");
+        showToast(data.message || "Gagal upload foto profil");
         return;
       }
 
       setProfile(data.user);
       localStorage.setItem("user", JSON.stringify(data.user));
-      alert("Foto profil berhasil diperbarui");
+      showToast("Foto profil berhasil diperbarui");
     } catch (error) {
       console.log(error);
-      alert("Tidak dapat terhubung ke server");
+      showToast("Tidak dapat terhubung ke server", "error");
     }
   };
 
@@ -171,28 +177,28 @@ function Profile() {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.message || "Gagal menghapus foto profil");
+        showToast(data.message || "Gagal menghapus foto profil");
         return;
       }
 
       setProfile(data.user);
       localStorage.setItem("user", JSON.stringify(data.user));
-      alert("Foto profil berhasil dihapus");
+      showToast("Foto profil berhasil dihapus");
     } catch (error) {
       console.log(error);
-      alert("Tidak dapat terhubung ke server");
+      showToast("Tidak dapat terhubung ke server", "error");
     }
   };
 
   const handleChangePassword = async () => {
     try {
       if (!oldPassword || !newPassword || !confirmPassword) {
-        alert("Semua field password wajib diisi");
+        showToast("Semua field password wajib diisi", "error");
         return;
       }
 
       if (newPassword !== confirmPassword) {
-        alert("Konfirmasi password tidak sama");
+        showToast("Konfirmasi password tidak sama", "error");
         return;
       }
 
@@ -217,7 +223,7 @@ function Profile() {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.message || "Gagal mengganti password");
+       showToast(data.message || "Gagal mengganti password");
         return;
       }
 
@@ -225,16 +231,16 @@ function Profile() {
       setNewPassword("");
       setConfirmPassword("");
       setShowPasswordModal(false);
-      alert("Password berhasil diganti");
+      showToast("Password berhasil diganti");
     } catch (error) {
       console.log(error);
-      alert("Tidak dapat terhubung ke server");
+      showToast("Tidak dapat terhubung ke server", "error");
     }
   };
   const handleDeleteAccount = async () => {
     try {
       if (!deletePassword) {
-        alert("Password wajib diisi");
+        showToast("Password wajib diisi", "error")
         return;
       }
 
@@ -254,11 +260,11 @@ function Profile() {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.message || "Gagal menghapus akun");
+        showToast(data.message || "Gagal menghapus akun");
         return;
       }
 
-      alert("Akun berhasil dihapus");
+      showToast("Akun berhasil dihapus");
 
       localStorage.removeItem("token");
       localStorage.removeItem("user");
@@ -267,7 +273,7 @@ function Profile() {
       window.location.href = "/";
     } catch (error) {
       console.log(error);
-      alert("Tidak dapat terhubung ke server");
+      showToast("Tidak dapat terhubung ke server", "error");
     }
   };
 
@@ -812,6 +818,7 @@ function Profile() {
           </button>
         </Modal>
       )}
+      {toast.show && <Toast message={toast.message} type={toast.type} />}
       {showDeleteAccountModal && (
         <Modal>
           <h2
@@ -866,6 +873,27 @@ function Profile() {
   );
 }
 
+function Toast({ message, type }) {
+  return (
+    <div style={{
+      position: "fixed",
+      bottom: "30px",
+      right: "30px",
+      backgroundColor: type === "success" ? "#10b981" : "#dc2626",
+      color: "white",
+      padding: "14px 24px",
+      borderRadius: "14px",
+      fontSize: "15px",
+      fontWeight: "500",
+      zIndex: 9999,
+      display: "flex",
+      alignItems: "center",
+      gap: "10px",
+    }}>
+      {type === "success" ? "✓" : "✕"} {message}
+    </div>
+  );
+}
 function Modal({ children }) {
   return (
     <div
