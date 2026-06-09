@@ -62,18 +62,11 @@ export const register = async (req, res) => {
     });
 
     try {
-        await sendOtpEmail({
-            email,
-            otp,
-        });
-        } catch (emailError) {
-        console.log("Gagal kirim email:", emailError);
-
-        return res.status(500).json({
-            success: false,
-            message: "OTP gagal dikirim ke email",
-        });
-        }
+      await sendOtpEmail({ email, otp });
+    } catch (emailError) {
+      console.log("Gagal kirim email:", emailError);
+      // Lanjutkan meski email gagal
+    }
 
         return res.status(201).json({
         success: true,
