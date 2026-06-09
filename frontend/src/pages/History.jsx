@@ -295,17 +295,56 @@ function History() {
                     boxSizing: "border-box",
                   }}
                 >
-                  <img
-                    src={item.image_url}
-                    alt="history"
+                  <div
+                    key={item.id}
                     style={{
-                      width: "100%",
-                      height: "clamp(180px, 25vw, 230px)",
-                      objectFit: "cover",
-                      borderRadius: "16px",
-                      marginBottom: "16px",
+                      backgroundColor: "white",
+                      borderRadius: "20px",
+                      overflow: "hidden",
+                      boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+                      boxSizing: "border-box",
                     }}
-                  />
+                  >
+                    <div style={{ position: "relative", width: "100%", aspectRatio: "1" }}>
+                      <img
+                        src={item.image_url}
+                        alt="history"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          display: "block",
+                        }}
+                      />
+                      <span style={{
+                        position: "absolute",
+                        bottom: "9px",
+                        left: "9px",
+                        background: "rgba(255,255,255,0.9)",
+                        backdropFilter: "blur(8px)",
+                        border: "1px solid rgba(16,185,129,0.2)",
+                        borderRadius: "999px",
+                        padding: "5px 11px",
+                        fontSize: "12px",
+                        fontWeight: "700",
+                        color: "#10b981",
+                      }}>
+                        {item.prediction}
+                      </span>
+                    </div>
+
+                    <div style={{ padding: "15px 16px 17px" }}>
+                      <p style={{ fontSize: "15px", fontWeight: "700", color: "#111827", marginBottom: "4px" }}>
+                        {item.prediction}
+                      </p>
+                      <p style={{ fontSize: "12px", color: "#10b981", marginBottom: "8px", fontFamily: "monospace" }}>
+                        {item.confidence}% akurasi
+                      </p>
+                      <p style={{ fontSize: "12px", color: "#555", lineHeight: "1.6" }}>
+                        {getDescription(item.prediction)}
+                      </p>
+                    </div>
+                  </div>
 
                   <h2
                     style={{
